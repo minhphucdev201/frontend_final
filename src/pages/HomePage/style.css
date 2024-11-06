@@ -3,13 +3,10 @@ body {
       position: relative;
       height: 100%;
       scroll-behavior: smooth;
+      background-color: #1e272e;
+      font-family: Poppins, cursive, serif;
+      color: white;
     }
-body {
-    background-color: #1e272e;
-    font-family: Poppins, cursive, serif;
-    color: white;
-    
-}
 
 /* Header styles */
 .header {
@@ -244,12 +241,14 @@ body {
 }
 
 .box-sidebar .bestgame{
+    
 
 }
 
 .box-sidebar .bestgame .bestgame__title{
     font-size: 22px;
     font-weight: 700;
+    padding-top: 40px;
 }
 
 .box-sidebar .bestgame .box-game{
@@ -278,7 +277,8 @@ body {
 .box-sidebar .bestgame .box-game .item .item__img img{
     height: 100%;
     width: 100%;
-    object-fit: fill;
+    border-radius:15px 15px 0px 0px;
+    
 }
 
 .box-sidebar .bestgame .box-game .item  .item__detail .item__text {
@@ -302,6 +302,7 @@ body {
     text-decoration: none;
     display: flex;
     justify-content: end;
+    transition: background-color 0.3s ease;
 }
 
 .box-sidebar .bestgame .box-game .box-link:hover{
@@ -371,7 +372,7 @@ body {
 
 .box-sidebar .sidebar .highscore .gamer .gamer-list .gamer-infor .gamer-score{
     font-size: 18px;
-    color: #FE0000;
+    color: #e74c3c;
 }
 
 .box-sidebar .sidebar .highscore .gamer .gamer-list .gamer-infor .gamer-game{
