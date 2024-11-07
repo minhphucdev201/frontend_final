@@ -11,33 +11,44 @@ import ScoreApi from '../../api/Score';
 export default function HomePage() {
     const [listGame, setListGame] = useState([]);
     const [listScore, setListScore] = useState([]);
-    const [listRecently, setListRecently] = useState([]);
-    const [visibleTopGame, setvisibleTopGame] = useState(6); // Số lượng item hiển thị ban đầu
-    const [visibleRencently, setvisibleRecently] = useState(6); // Số lượng item hiển thị ban đầu
+    const [listSwiperGame, setListSwiperGame] = useState([]);
+    const [listUehReview, setListUehReview] = useState([]);
+    const [visibleTopGame, setvisibleTopGame] = useState(6);
+    const [visibleUehReivew, setvisibleUehReivew] = useState(6);
+    const [visibletopGamer, setvisibletopGamer] = useState(6);
 
     const handleSeeMore = (e) => {
         e.preventDefault();
-        setvisibleTopGame(prevCount => prevCount + 3); // Tăng số lượng item hiển thị lên 3
+        setvisibleTopGame(prevCount => prevCount + 3);
     };
 
     const handleSeeLess = (e) => {
         e.preventDefault();
-        setvisibleTopGame(prevCount => Math.max(prevCount - 3, 4)); // Giảm số lượng item hiển thị xuống 3
+        setvisibleTopGame(prevCount => Math.max(prevCount - 3, 4));
     };
 
 
     const handleSeeMoreRecently = (e) => {
         e.preventDefault();
-        setvisibleRecently(prevCount => prevCount + 3); // Tăng số lượng item hiển thị lên 3
+        setvisibleUehReivew(prevCount => prevCount + 3);
     };
 
     const handleSeeLessRecently = (e) => {
         e.preventDefault();
-        setvisibleRecently(prevCount => Math.max(prevCount - 3, 4)); // Giảm số lượng item hiển thị xuống 3
+        setvisibleUehReivew(prevCount => Math.max(prevCount - 3, 4));
     };
 
+    const handleSeeMoreGamer = (e) => {
+        e.preventDefault();
+        setvisibletopGamer(prevCount => prevCount + 3);
+    };
+
+    const handleSeeLessGamer = (e) => {
+        e.preventDefault();
+        setvisibletopGamer(prevCount => Math.max(prevCount - 3, 4));
+    };
     const [isJumped, setIsJumped] = useState(false);
-    const recentlyPlayerRef = useRef(null);
+    const uehReivewPlayerRef = useRef(null);
     const topGamePlayerRef = useRef(null);
 
     const handleJumpTopGame = (e) => {
@@ -46,20 +57,20 @@ export default function HomePage() {
 
         // Cuộn đến vị trí
         if (topGamePlayerRef.current) {
-            const offset = 80; // Chiều cao của header
+            const offset = 120; // Chiều cao của header
             const top = topGamePlayerRef.current.getBoundingClientRect().top + window.scrollY - offset;
             window.scrollTo({ top, behavior: 'smooth' });
         }
     };
 
-    const handleJumpToRecentlyPlayer = (e) => {
+    const handleJumpUehReivew = (e) => {
         e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
         setIsJumped(true); // Đặt state là true để áp dụng CSS
 
         // Cuộn đến vị trí
-        if (recentlyPlayerRef.current) {
-            const offset = 80; // Chiều cao của header
-            const top = recentlyPlayerRef.current.getBoundingClientRect().top + window.scrollY - offset;
+        if (uehReivewPlayerRef.current) {
+            const offset = 120; // Chiều cao của header
+            const top = uehReivewPlayerRef.current.getBoundingClientRect().top + window.scrollY - offset;
             window.scrollTo({ top, behavior: 'smooth' });
         }
     };
@@ -94,8 +105,8 @@ export default function HomePage() {
         (
             async () => {
                 try {
-                    const res = await HomePageApi.getRencently();
-                    setListRecently(res.data.data);
+                    const res = await HomePageApi.getUehReview();
+                    setListUehReview(res.data.data);
 
                 } catch (error) {
                     console.log(error);
@@ -103,6 +114,7 @@ export default function HomePage() {
             }
         )()
     }, []);
+
     return (
         <>
             <section>
@@ -110,7 +122,10 @@ export default function HomePage() {
 
                     <Swiper
                         modules={[Autoplay]}
-
+                        autoplay={{
+                            delay: 1500,
+                            disableOnInteraction: false,
+                        }}
                         spaceBetween={50}
                         slidesPerView={1}
 
@@ -140,119 +155,24 @@ export default function HomePage() {
 
                             >
                                 {/* Các slide */}
-                                <SwiperSlide> <div className="item " style={{ height: "185px" }}>
-                                    <div className="item__img">
-                                        <img src="https://res.cloudinary.com/phucdev/image/upload/v1730797820/Screenshot_2024-09-23_111111_jyl3hq.png" alt="" /></div>
-                                    <div className="item__detail row">
-                                        <div className="item__text col-6">
-                                            <p className="fw-bold fs-6" style={{ marginBottom: 0 }}>v</p>
-                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>UEH review</p>
+                                {listGame.map((item, index) => (
+                                    <SwiperSlide key={index}> <div className="item " style={{ height: "185px" }}>
+                                        <div className="item__img">
+                                            <img src={item.image} alt="" /></div>
+                                        <div className="item__detail " style={{ margin: 0 }}>
+                                            <div className="item__text " style={{ marginLeft: '4px' }}>
+                                                <p className="fw-bold " style={{ marginBottom: 0 }}>{item.game_name}</p>
+                                                <p className="fw-lighter" style={{ marginBottom: 0 }}>{item.genre}</p>
+                                            </div>
+                                            <div className="item__icon ">
+                                                <span><i className="fa-solid fa-play fa-xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
+                                                <span><i className="fa-regular fa-heart fa-xl" style={{ color: '#ffffff' }} /></span>
+                                            </div>
                                         </div>
-                                        <div className="item__icon col-6">
-                                            <span><i className="fa-solid fa-play fa-2xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
-                                            <span><i className="fa-regular fa-heart fa-2xl" style={{ color: '#ffffff' }} /></span>
-                                        </div>
-                                    </div>
-                                </div></SwiperSlide>
-                                <SwiperSlide> <div className="item ">
-                                    <div className="item__img">
-                                        <img src="https://res.cloudinary.com/phucdev/image/upload/v1730797820/Screenshot_2024-09-23_111111_jyl3hq.png" alt="" /></div>
-                                    <div className="item__detail row">
-                                        <div className="item__text col-6">
-                                            <p className="fw-bold fs-6" style={{ marginBottom: 0 }}>v</p>
-                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>UEH review</p>
-                                        </div>
-                                        <div className="item__icon col-6">
-                                            <span><i className="fa-solid fa-play fa-2xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
-                                            <span><i className="fa-regular fa-heart fa-2xl" style={{ color: '#ffffff' }} /></span>
-                                        </div>
-                                    </div>
-                                </div></SwiperSlide>
-                                <SwiperSlide> <div className="item ">
-                                    <div className="item__img">
-                                        <img src="https://res.cloudinary.com/phucdev/image/upload/v1730797820/Screenshot_2024-09-23_111111_jyl3hq.png" alt="" /></div>
-                                    <div className="item__detail row">
-                                        <div className="item__text col-6">
-                                            <p className="fw-bold fs-6" style={{ marginBottom: 0 }}>v</p>
-                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>UEH review</p>
-                                        </div>
-                                        <div className="item__icon col-6">
-                                            <span><i className="fa-solid fa-play fa-2xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
-                                            <span><i className="fa-regular fa-heart fa-2xl" style={{ color: '#ffffff' }} /></span>
-                                        </div>
-                                    </div>
-                                </div></SwiperSlide>
-                                <SwiperSlide> <div className="item ">
-                                    <div className="item__img">
-                                        <img src="https://res.cloudinary.com/phucdev/image/upload/v1730797820/Screenshot_2024-09-23_111111_jyl3hq.png" alt="" /></div>
-                                    <div className="item__detail row">
-                                        <div className="item__text col-6">
-                                            <p className="fw-bold fs-6" style={{ marginBottom: 0 }}>v</p>
-                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>UEH review</p>
-                                        </div>
-                                        <div className="item__icon col-6">
-                                            <span><i className="fa-solid fa-play fa-2xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
-                                            <span><i className="fa-regular fa-heart fa-2xl" style={{ color: '#ffffff' }} /></span>
-                                        </div>
-                                    </div>
-                                </div></SwiperSlide>
-                                <SwiperSlide> <div className="item ">
-                                    <div className="item__img">
-                                        <img src="https://res.cloudinary.com/phucdev/image/upload/v1730797820/Screenshot_2024-09-23_111111_jyl3hq.png" alt="" /></div>
-                                    <div className="item__detail row">
-                                        <div className="item__text col-6">
-                                            <p className="fw-bold fs-6" style={{ marginBottom: 0 }}>v</p>
-                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>UEH review</p>
-                                        </div>
-                                        <div className="item__icon col-6">
-                                            <span><i className="fa-solid fa-play fa-2xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
-                                            <span><i className="fa-regular fa-heart fa-2xl" style={{ color: '#ffffff' }} /></span>
-                                        </div>
-                                    </div>
-                                </div></SwiperSlide>
-                                <SwiperSlide> <div className="item ">
-                                    <div className="item__img">
-                                        <img src="https://res.cloudinary.com/phucdev/image/upload/v1730797820/Screenshot_2024-09-23_111111_jyl3hq.png" alt="" /></div>
-                                    <div className="item__detail row">
-                                        <div className="item__text col-6">
-                                            <p className="fw-bold fs-6" style={{ marginBottom: 0 }}>v</p>
-                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>UEH review</p>
-                                        </div>
-                                        <div className="item__icon col-6">
-                                            <span><i className="fa-solid fa-play fa-2xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
-                                            <span><i className="fa-regular fa-heart fa-2xl" style={{ color: '#ffffff' }} /></span>
-                                        </div>
-                                    </div>
-                                </div></SwiperSlide>
-                                <SwiperSlide> <div className="item ">
-                                    <div className="item__img">
-                                        <img src="https://res.cloudinary.com/phucdev/image/upload/v1730797820/Screenshot_2024-09-23_111111_jyl3hq.png" alt="" /></div>
-                                    <div className="item__detail row">
-                                        <div className="item__text col-6">
-                                            <p className="fw-bold fs-6" style={{ marginBottom: 0 }}>v</p>
-                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>UEH review</p>
-                                        </div>
-                                        <div className="item__icon col-6">
-                                            <span><i className="fa-solid fa-play fa-2xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
-                                            <span><i className="fa-regular fa-heart fa-2xl" style={{ color: '#ffffff' }} /></span>
-                                        </div>
-                                    </div>
-                                </div></SwiperSlide>
-                                <SwiperSlide> <div className="item ">
-                                    <div className="item__img">
-                                        <img src="https://res.cloudinary.com/phucdev/image/upload/v1730797820/Screenshot_2024-09-23_111111_jyl3hq.png" alt="" /></div>
-                                    <div className="item__detail row">
-                                        <div className="item__text col-6">
-                                            <p className="fw-bold fs-6" style={{ marginBottom: 0 }}>v</p>
-                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>UEH review</p>
-                                        </div>
-                                        <div className="item__icon col-6">
-                                            <span><i className="fa-solid fa-play fa-2xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
-                                            <span><i className="fa-regular fa-heart fa-2xl" style={{ color: '#ffffff' }} /></span>
-                                        </div>
-                                    </div>
-                                </div></SwiperSlide>
-                                {/* Thêm nhiều slide nếu cần */}
+                                    </div></SwiperSlide>
+
+                                ))}
+
                             </Swiper>
                         </div>
                     </div>
@@ -273,14 +193,14 @@ export default function HomePage() {
                                                     <div className="item__img">
                                                         <img src={item.image} alt="" />
                                                     </div>
-                                                    <div className="item__detail row">
-                                                        <div className="item__text col-6">
-                                                            <p className="fw-bold fs-8" style={{ marginBottom: 0 }}>{item.game_name}</p>
-                                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>{item.tag}</p>
+                                                    <div className="item__detail ">
+                                                        <div className="item__text ">
+                                                            <p className="fw-bold " style={{ marginBottom: 0 }}>{item.game_name}</p>
+                                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>{item.genre}</p>
                                                         </div>
-                                                        <div className="item__icon col-6">
-                                                            <span><i className="fa-solid fa-play fa-2xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
-                                                            <span><i className="fa-regular fa-heart fa-2xl" style={{ color: '#ffffff' }} /></span>
+                                                        <div className="item__icon ">
+                                                            <span><i className="fa-solid fa-play fa-xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
+                                                            <span><i className="fa-regular fa-heart fa-xl" style={{ color: '#ffffff' }} /></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -297,24 +217,24 @@ export default function HomePage() {
                                 </div>
                             </div>
                             {/* Recently player */}
-                            <div className={`bestgame ${isJumped ? 'jumped' : ''}`} ref={recentlyPlayerRef}>
-                                <p className="bestgame__title mt-4">Recently player</p>
+                            <div className={`bestgame ${isJumped ? 'jumped' : ''}`} ref={uehReivewPlayerRef}>
+                                <p className="bestgame__title mt-4">UEH Review</p>
                                 <div className="box-game">
                                     <div className="row">
 
-                                        {listRecently.slice(0, visibleRencently).map((item, index) => (
+                                        {listUehReview.slice(0, visibleUehReivew).map((item, index) => (
                                             <div className="col-4 my-3" key={index}  >
                                                 <div className="item ">
                                                     <div className="item__img">
                                                         <img src={item.image} alt="" /></div>
-                                                    <div className="item__detail row">
-                                                        <div className="item__text col-6">
-                                                            <p className="fw-bold fs-6" style={{ marginBottom: 0 }}>{item.game_name}</p>
-                                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>{item.description}</p>
+                                                    <div className="item__detail ">
+                                                        <div className="item__text">
+                                                            <p className="fw-bold " style={{ marginBottom: 0 }}>{item.game_name}</p>
+                                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>{item.tag}</p>
                                                         </div>
-                                                        <div className="item__icon col-6">
-                                                            <span><i className="fa-solid fa-play fa-2xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
-                                                            <span><i className="fa-regular fa-heart fa-2xl" style={{ color: '#ffffff' }} /></span>
+                                                        <div className="item__icon ">
+                                                            <span><i className="fa-solid fa-play fa-xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
+                                                            <span><i className="fa-regular fa-heart fa-xl" style={{ color: '#ffffff' }} /></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -322,10 +242,10 @@ export default function HomePage() {
                                         ))}
 
 
-                                        {visibleRencently < listRecently.length && (
+                                        {visibleUehReivew < listUehReview.length && (
                                             <a href="" className="box-link" onClick={handleSeeMoreRecently}>See more</a>
                                         )}
-                                        {visibleRencently > 6 && (
+                                        {visibleUehReivew > 6 && (
                                             <a href="" className="box-link" onClick={handleSeeLessRecently}>See less</a>
                                         )}
                                     </div>
@@ -334,9 +254,8 @@ export default function HomePage() {
                             <div className="jump row">
                                 <p className="jump-title col-3 ">Jump to: </p>
                                 <ul className="jump-list col-9 ">
-                                    <li className="jump-item"><a href="#" className="jump-link" onClick={handleJumpTopGame}>Top games</a></li>
-                                    <li className="jump-item"><a href="#" className="jump-link" onClick={handleJumpToRecentlyPlayer}>Recently player</a></li>
-                                    <li className="jump-item"><a href="" className="jump-link">UEH Review</a></li>
+                                    <li className="jump-item"><a href="" className="jump-link" onClick={handleJumpTopGame}>Top games</a></li>
+                                    <li className="jump-item"><a href="" className="jump-link" onClick={handleJumpUehReivew}>UEH Review</a></li>
                                     <li className="jump-item"><a href="" className="jump-link">UEH Green</a></li>
                                     <li className="jump-item"><a href="" className="jump-link">EduGames</a></li>
                                 </ul>
@@ -346,9 +265,10 @@ export default function HomePage() {
                         <div className="sidebar  col-5">
                             <div className="highscore">
                                 <p className="highscore__title">Top Gamer
-                                </p><div className="gamer">
+                                </p>
+                                <div className="gamer">
                                     <ul className="gamer-list">
-                                        {listScore.map((item, index) => {
+                                        {listScore.slice(0, visibletopGamer).map((item, index) => {
                                             return (
                                                 <li className="gamer-item" key={index}>
                                                     <div className="gamer-infor">
@@ -368,6 +288,7 @@ export default function HomePage() {
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </section></>

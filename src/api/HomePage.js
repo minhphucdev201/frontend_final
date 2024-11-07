@@ -5,7 +5,7 @@ const HomePageApi = {
         const url = "/games/getall";
         return axiosClient.get(url);
     },
-    getRencently(params){
+    getUehReview(params){
         const url = "/games?genre=recently";
         return axiosClient.get(url,{ params});
     },
