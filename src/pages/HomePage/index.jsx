@@ -13,9 +13,13 @@ export default function HomePage() {
     const [listScore, setListScore] = useState([]);
     const [listSwiperGame, setListSwiperGame] = useState([]);
     const [listUehReview, setListUehReview] = useState([]);
+    const [listUehGreen, setListUehGreen] = useState([]);
+    const [listUehEduGames, setListUehEduGames] = useState([]);
     const [visibleTopGame, setvisibleTopGame] = useState(6);
     const [visibleUehReivew, setvisibleUehReivew] = useState(6);
     const [visibletopGamer, setvisibletopGamer] = useState(6);
+    const [visibleUehGreen, setvisibleUehGreen] = useState(6);
+    const [visibleEduGames, setvisibleEduGames] = useState(6);
 
     const handleSeeMore = (e) => {
         e.preventDefault();
@@ -47,10 +51,31 @@ export default function HomePage() {
         e.preventDefault();
         setvisibletopGamer(prevCount => Math.max(prevCount - 3, 4));
     };
-    const [isJumped, setIsJumped] = useState(false);
-    const uehReivewPlayerRef = useRef(null);
-    const topGamePlayerRef = useRef(null);
 
+    const handleSeeMoreUehGreen = (e) => {
+        e.preventDefault();
+        setvisibleUehGreen(prevCount => prevCount + 3);
+    };
+
+    const handleSeeLessUehGreen = (e) => {
+        e.preventDefault();
+        setvisibleUehGreen(prevCount => Math.max(prevCount - 3, 4));
+    };
+
+    const handleSeeMoreEduGames = (e) => {
+        e.preventDefault();
+        setvisibleEduGames(prevCount => prevCount + 3);
+    };
+
+    const handleSeeLessEduGames = (e) => {
+        e.preventDefault();
+        setvisibleEduGames(prevCount => Math.max(prevCount - 3, 4));
+    };
+    const [isJumped, setIsJumped] = useState(false);
+    const topGamePlayerRef = useRef(null);
+    const uehReivewPlayerRef = useRef(null);
+    const uehGreenPlayerRef = useRef(null);
+    const eduGamesPlayerRef = useRef(null);
     const handleJumpTopGame = (e) => {
         e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
         setIsJumped(true); // Đặt state là true để áp dụng CSS
@@ -74,12 +99,36 @@ export default function HomePage() {
             window.scrollTo({ top, behavior: 'smooth' });
         }
     };
+
+    const handleJumpUehGreen = (e) => {
+        e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+        setIsJumped(true); // Đặt state là true để áp dụng CSS
+
+        // Cuộn đến vị trí
+        if (uehGreenPlayerRef.current) {
+            const offset = 120; // Chiều cao của header
+            const top = uehGreenPlayerRef.current.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }
+    };
+
+    const handleJumpEduGames = (e) => {
+        e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+        setIsJumped(true); // Đặt state là true để áp dụng CSS
+
+        // Cuộn đến vị trí
+        if (eduGamesPlayerRef.current) {
+            const offset = 120; // Chiều cao của header
+            const top = eduGamesPlayerRef.current.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }
+    };
     useEffect(() => {
         (
             async () => {
                 try {
 
-                    const res = await HomePageApi.getAll();
+                    const res = await HomePageApi.getTopGame();
                     setListGame(res.data.data);
                 } catch (error) {
                     console.log(error);
@@ -114,7 +163,34 @@ export default function HomePage() {
             }
         )()
     }, []);
+    useEffect(() => {
+        (
+            async () => {
+                try {
+                    const res = await HomePageApi.getUehGreen();
+                    setListUehGreen(res.data.data);
 
+
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        )()
+    }, []);
+    useEffect(() => {
+        (
+            async () => {
+                try {
+                    const res = await HomePageApi.getUehEduGames();
+                    setListUehEduGames(res.data.data);
+
+
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        )()
+    }, []);
     return (
         <>
             <section>
@@ -217,7 +293,7 @@ export default function HomePage() {
                                 </div>
                             </div>
                             {/* Recently player */}
-                            <div className={`bestgame ${isJumped ? 'jumped' : ''}`} ref={uehReivewPlayerRef}>
+                            <div className={`bestgame ${isJumped ? 'jumped' : ''}`} ref={uehReivewPlayerRef} style={{ marginTop: "60px" }}>
                                 <p className="bestgame__title mt-4">UEH Review</p>
                                 <div className="box-game">
                                     <div className="row">
@@ -256,11 +332,80 @@ export default function HomePage() {
                                 <ul className="jump-list col-9 ">
                                     <li className="jump-item"><a href="" className="jump-link" onClick={handleJumpTopGame}>Top games</a></li>
                                     <li className="jump-item"><a href="" className="jump-link" onClick={handleJumpUehReivew}>UEH Review</a></li>
-                                    <li className="jump-item"><a href="" className="jump-link">UEH Green</a></li>
-                                    <li className="jump-item"><a href="" className="jump-link">EduGames</a></li>
+                                    <li className="jump-item"><a href="" className="jump-link" onClick={handleJumpUehGreen}>UEH Green</a></li>
+                                    <li className="jump-item"><a href="" className="jump-link" onClick={handleJumpEduGames}>EduGames</a></li>
                                 </ul>
                             </div>
+                            {/* ueh green */}
+                            <div className={`bestgame ${isJumped ? 'jumped' : ''}`} ref={uehGreenPlayerRef} style={{ marginTop: "60px" }}>
+                                <p className="bestgame__title mt-4">UEH Green</p>
+                                <div className="box-game">
+                                    <div className="row">
 
+                                        {listUehGreen.slice(0, visibleUehGreen).map((item, index) => (
+                                            <div className="col-4 my-3" key={index}  >
+                                                <div className="item ">
+                                                    <div className="item__img">
+                                                        <img src={item.image} alt="" /></div>
+                                                    <div className="item__detail ">
+                                                        <div className="item__text">
+                                                            <p className="fw-bold " style={{ marginBottom: 0 }}>{item.game_name}</p>
+                                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>{item.tag}</p>
+                                                        </div>
+                                                        <div className="item__icon ">
+                                                            <span><i className="fa-solid fa-play fa-xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
+                                                            <span><i className="fa-regular fa-heart fa-xl" style={{ color: '#ffffff' }} /></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+
+
+                                        {visibleUehGreen < listUehGreen.length && (
+                                            <a href="" className="box-link" onClick={handleSeeMoreUehGreen}>See more</a>
+                                        )}
+                                        {visibleUehGreen > 6 && (
+                                            <a href="" className="box-link" onClick={handleSeeLessUehGreen}>See less</a>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                            {/* edu games */}
+                            <div className={`bestgame ${isJumped ? 'jumped' : ''}`} ref={eduGamesPlayerRef} style={{ marginTop: "60px" }}>
+                                <p className="bestgame__title mt-4">EduGames</p>
+                                <div className="box-game">
+                                    <div className="row">
+
+                                        {listUehEduGames.slice(0, visibleEduGames).map((item, index) => (
+                                            <div className="col-4 my-3" key={index}  >
+                                                <div className="item ">
+                                                    <div className="item__img">
+                                                        <img src={item.image} alt="" /></div>
+                                                    <div className="item__detail ">
+                                                        <div className="item__text">
+                                                            <p className="fw-bold " style={{ marginBottom: 0 }}>{item.game_name}</p>
+                                                            <p className="fw-lighter" style={{ marginBottom: 0 }}>{item.tag}</p>
+                                                        </div>
+                                                        <div className="item__icon ">
+                                                            <span><i className="fa-solid fa-play fa-xl" style={{ color: '#FFFFFF', marginRight: '8px' }} /></span>
+                                                            <span><i className="fa-regular fa-heart fa-xl" style={{ color: '#ffffff' }} /></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+
+
+                                        {visibleEduGames < listUehEduGames.length && (
+                                            <a href="" className="box-link" onClick={handleSeeMoreEduGames}>See more</a>
+                                        )}
+                                        {visibleEduGames > 6 && (
+                                            <a href="" className="box-link" onClick={handleSeeLessEduGames}>See less</a>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div className="sidebar  col-5">
                             <div className="highscore">
@@ -283,8 +428,8 @@ export default function HomePage() {
 
                                         })}
 
-
                                     </ul>
+
                                 </div>
                             </div>
                         </div>

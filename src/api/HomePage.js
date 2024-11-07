@@ -5,11 +5,22 @@ const HomePageApi = {
         const url = "/games/getall";
         return axiosClient.get(url);
     },
-    getUehReview(params){
-        const url = "/games?genre=recently";
-        return axiosClient.get(url,{ params});
+    getTopGame(){
+        const url = "/games/topgame";
+        return axiosClient.get(url);
     },
-
+    getUehReview(){
+        const url = "/games/uehreview";
+        return axiosClient.get(url);
+    },
+    getUehGreen(){
+        const url = "/games/uehgreen";
+        return axiosClient.get(url);
+    },
+    getUehEduGames(){
+        const url = "/games/edugames";
+        return axiosClient.get(url);
+    }
 }
 
 export default HomePageApi;
