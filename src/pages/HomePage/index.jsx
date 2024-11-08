@@ -208,17 +208,15 @@ export default function HomePage() {
 
 
                     >
-                        <SwiperSlide> <div className="swiper-slide">
-                            <img src="https://cdn2.fptshop.com.vn/unsafe/Uploads/images/tin-tuc/173789/Originals/Tro-choi-mien-phi-khong-tai-ve-may-0.jpg" />
+                        <SwiperSlide> <div className="swiper-slide" style={{ objectFit: "contain" }}>
+                            <img src="https://www.ueh.edu.vn/images/icon/no-image-box2.gif" />
                         </div></SwiperSlide>
-                        <SwiperSlide> <div className="swiper-slide"><img src="https://baobariavungtau.com.vn/dataimages/202301/original/images1778766_11M_1.jpeg" /></div></SwiperSlide>
-                        <SwiperSlide>  <div className="swiper-slide"><img src="https://st.gamevui.vn/images/image/2024/01/12/ban-hop-voi-nhan-vat-nao-trong-mario-10.jpg" /></div></SwiperSlide>
-                        <SwiperSlide>     <div className="swiper-slide"><img src="https://st.gamevui.vn/images/image/2022/02/21/bieu-ngu-minecraft-1.jpg" /></div></SwiperSlide>
+                        <SwiperSlide> <div className="swiper-slide"><img src="https://en.ueh.edu.vn/images/upload/editer/green%20campus%202023.jpg" /></div></SwiperSlide>
+                        <SwiperSlide>  <div className="swiper-slide"><img src="https://dsa.ueh.edu.vn/wp-content/uploads/2022/01/253659372_188730566766296_8263858369302405345_n.jpg" /></div></SwiperSlide>
+                        <SwiperSlide>     <div className="swiper-slide"><img src="https://res.cloudinary.com/phucdev/image/upload/v1731038398/Slide1_p3mf1z.png" /></div></SwiperSlide>
 
                     </Swiper>
-                    <div className="play__now">
-                        <p className="play__now-link">PLAY NOW</p>
-                    </div>
+
                     <div className="collection" style={{ marginTop: "-24px" }}>
                         <div className="collection__slideshow">
 
